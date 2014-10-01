@@ -24,7 +24,7 @@ class ElasticSearchConnector extends OutboundConnector {
       if (res.isSucceeded) sender ! DocCreated(document)
       else sender ! APIException(StatusCodes.BadGateway, "ElasticSearch error", res.getErrorMessage)
 
-    case Search(query: String) =>
+    case Search(query) =>
       val search = new io.searchbox.core.Search.Builder(json(query))
                           .addIndex(indexName)
                           .addType("document")

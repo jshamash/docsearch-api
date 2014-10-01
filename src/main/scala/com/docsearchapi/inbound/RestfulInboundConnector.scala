@@ -36,7 +36,8 @@ class RestfulInboundConnector(db: ActorRef, es: ActorRef) extends InboundConnect
         } ~
         parameter('q) { query =>
           get {
-            complete { es ? Search(query) }
+            val strippedQuery = query.split("[^\\w]+").reduce(_ + " " + _)
+            complete { es ? Search(strippedQuery) }
           }
         }
       } ~

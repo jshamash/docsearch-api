@@ -1,7 +1,7 @@
 docsearch-api
 =============
 
-Index &amp; search documents in the cloud.
+Index and search documents in the cloud.
 
 - Stores documents in MongoDB
 - Indexes documents & searches using ElasticSearch
@@ -54,5 +54,8 @@ Presently running at [http://docsearch.herokuapp.com](http://docsearch.herokuapp
 | Method        | Path          | Request Entity  | Response Entity |
 | :------------:|:-------------:| :-------------: | :-------------: |
 | POST          | /documents    | Document        | The created Document|
-| GET           | /documents?q=<query>|   None    | SearchResult (of searching for <query>)|
-| GET           | /documents/<name>   |    None   | The Document with name=<name> |
+| GET           | /documents?q=`<query>`|   None    | SearchResult (of searching for `<query>`)|
+| GET           | /documents/`<name>`   |    None   | The Document with name=`<name>` |
+
+* Multi-word searches are possible, simply put the query terms in quotations, for example: `/documents?q="multi word query"`
+* Search terms cannot contain non-alphanumeric characters. These will in fact be treated as spaces.
