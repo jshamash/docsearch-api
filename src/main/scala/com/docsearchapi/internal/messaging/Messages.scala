@@ -1,6 +1,9 @@
 package com.docsearchapi.internal.messaging
 
-import spray.http.HttpResponse
+import com.docsearchapi.internal.model._
+import spray.http._
+import APIJsonProtocol._
+import spray.json._
 
 
 trait Message {}
@@ -14,3 +17,17 @@ trait APIResponse extends Message {
 }
 
 trait APIResponseSuccess extends APIResponse
+
+case class IndexDocument(doc: Document) extends DBRequest
+case class Search(searchTerms: String) extends DBRequest
+case class GetDocument(name: String) extends DBRequest
+
+case class DocCreated(doc: Document) extends APIResponseSuccess {
+  def marshal() = HttpResponse(StatusCodes.Created, HttpEntity(ContentTypes.`application/json`, doc.toJson.toString()))
+}
+case class SearchResponse(result: SearchResult) extends APIResponseSuccess {
+  def marshal() = HttpResponse(StatusCodes.OK, HttpEntity(ContentTypes.`application/json`, result.toJson.toString()))
+}
+case class DocumentInfo(doc: Document) extends APIResponseSuccess {
+  def marshal() = HttpResponse(StatusCodes.OK, HttpEntity(ContentTypes.`application/json`, doc.toJson.toString()))
+}

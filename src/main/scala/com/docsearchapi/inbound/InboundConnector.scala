@@ -18,19 +18,14 @@ trait InboundConnector extends HttpServiceActor with DocsearchActor {
         case Success(response: APIResponseSuccess) =>
           ctx.marshalTo(response.marshal)
         case Success(e: APIException) =>
-          log.warning("Responding with " + e)
           ctx.marshalTo(e.marshal)
         case Failure(e: APIException) =>
-          log.warning("Responding with " + e)
           ctx.marshalTo(e.marshal)
         case Success(e: Exception) =>
-          log.warning("Responding with " + e)
           ctx.marshalTo(APIException(e).marshal)
         case Failure(e: Exception) =>
-          log.warning("Responding with " + e)
           ctx.marshalTo(APIException(e).marshal)
         case unknown =>
-          log.warning("Responding with " + unknown)
           ctx.marshalTo(HttpResponse(InternalServerError).withEntity(unknown.toString))
       }
     }
