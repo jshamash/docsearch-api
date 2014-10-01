@@ -59,3 +59,4 @@ Presently running at [http://docsearch.herokuapp.com](http://docsearch.herokuapp
 
 * Multi-word searches are possible, simply put the query terms in quotations, for example: `/documents?q="multi word query"`
 * Search terms cannot contain non-alphanumeric characters. These will in fact be treated as spaces.
+* Higher weight is given to a match if the document's title matches the search query, as opposed to just its body.
