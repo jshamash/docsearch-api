@@ -1,7 +1,8 @@
 package com.docsearchapi.outbound
 
 import com.docsearchapi.internal.messaging._
-import com.mongodb.{BasicDBObject, MongoURI}
+import com.mongodb.{MongoException, WriteConcern, BasicDBObject, MongoURI}
+import spray.http.StatusCodes
 import spray.json._
 import com.docsearchapi.internal.model._
 import APIJsonProtocol._
@@ -19,9 +20,11 @@ class MongoDBConnector extends OutboundConnector {
     case IndexDocument(doc) =>
       try {
         val obj = new BasicDBObject("name", doc.name).append("doc", doc.doc)
-        collection.insert(obj)
+        collection.insert(obj, WriteConcern.SAFE)
         sender ! DocCreated(doc)
       } catch {
+        case e: MongoException.DuplicateKey => sender ! APIException(StatusCodes.Conflict,
+          "Document not added due to conflict", s"A document with the name '${doc.name}' already exists.")
         case e: Exception => sender ! APIException(e)
       }
 

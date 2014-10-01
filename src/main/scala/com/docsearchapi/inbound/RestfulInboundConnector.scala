@@ -2,12 +2,12 @@ package com.docsearchapi.inbound
 
 import akka.actor.ActorRef
 import akka.pattern.ask
-import com.docsearchapi.internal.messaging.{GetDocument, IndexDocument}
+import com.docsearchapi.internal.messaging._
 import com.docsearchapi.internal.model._
 
 import scala.language.postfixOps
 
-class RestfulInboundConnector(db: ActorRef) extends InboundConnector {
+class RestfulInboundConnector(db: ActorRef, es: ActorRef) extends InboundConnector {
 
   val route = {
     import APIJsonProtocol._
@@ -26,12 +26,17 @@ class RestfulInboundConnector(db: ActorRef) extends InboundConnector {
       path("documents") {
         post {
           entity(as[Document]) { doc =>
-            complete { db ? IndexDocument(doc) }
+            complete {
+              (db ? IndexDocument(doc)).flatMap{
+                case _: APIResponseSuccess => es ? IndexDocument(doc)
+                case e: APIException       => throw e
+              }
+            }
           }
         } ~
         parameter('q) { query =>
           get {
-            complete { "Search for " + query }
+            complete { es ? Search(query) }
           }
         }
       } ~

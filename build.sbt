@@ -28,7 +28,8 @@ libraryDependencies ++= {
     "io.spray"            %   "spray-client"  % sprayV,
     "io.spray"            %%  "spray-json"	  % sprayJsonV,
     "com.typesafe.akka"   %%  "akka-actor"    % akkaV,
-    "com.sksamuel.elastic4s" %% "elastic4s" % "1.2.1.2",
-    "org.mongodb"         %   "mongo-java-driver" % "2.12.3"
+    "io.searchbox"        %   "jest"          % "0.1.2",
+    "org.mongodb"         %   "mongo-java-driver" % "2.12.3",
+    "org.slf4j"           %   "slf4j-simple"  % "1.7.7"
   )
 }

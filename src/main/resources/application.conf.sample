@@ -1,0 +1,19 @@
+service {
+  interface = "0.0.0.0"
+  # Can be overridden by the environment variable $PORT
+  port = 8080
+  timeout = 5
+}
+
+elasticsearch {
+  # ElasticSearch endpoint, must support REST calls
+  uri = "https://<user>:<key>@<server>.searchly.com"
+  # The index to update with new documents
+  index = "docsearch"
+}
+
+mongodb {
+  uri = "mongodb://<user>:<pass>@<server>.mongohq.com:10016/docsearch"
+  # The collection to update with new documents
+  collection = "documents"
+}

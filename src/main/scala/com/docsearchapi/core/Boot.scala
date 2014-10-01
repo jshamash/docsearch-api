@@ -5,7 +5,7 @@ import akka.io.IO
 import akka.pattern.ask
 import akka.util.Timeout
 import com.docsearchapi.inbound.RestfulInboundConnector
-import com.docsearchapi.outbound.MongoDBConnector
+import com.docsearchapi.outbound.{ElasticSearchConnector, MongoDBConnector}
 import com.typesafe.config.ConfigFactory
 import spray.can.Http
 
@@ -20,7 +20,8 @@ object Boot extends App {
   implicit val timeout = Timeout(config.getInt("service.timeout") seconds)
 
   val dbConnector = system.actorOf(Props[MongoDBConnector], "db-connector")
-  val inboundConnector = system.actorOf(Props(classOf[RestfulInboundConnector], dbConnector), "inbound-connector")
+  val esConnector = system.actorOf(Props[ElasticSearchConnector], "es-connector")
+  val inboundConnector = system.actorOf(Props(classOf[RestfulInboundConnector], dbConnector, esConnector), "inbound-connector")
 
   val iface = config.getString("service.interface")
   val port = Properties.envOrNone("PORT") match {

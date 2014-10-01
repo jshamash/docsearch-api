@@ -1,3 +1,4 @@
 package com.docsearchapi.internal.model
 
-case class SearchResult(documentName: String, documentPosition: String, score: Int)
+case class SearchResult(documentName: String, document: String, score: Double)
+
