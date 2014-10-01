@@ -26,7 +26,8 @@ case class DocCreated(doc: Document) extends APIResponseSuccess {
   def marshal() = HttpResponse(StatusCodes.Created, HttpEntity(ContentTypes.`application/json`, doc.toJson.toString()))
 }
 case class SearchResponse(results: List[SearchResult]) extends APIResponseSuccess {
-  def marshal() = HttpResponse(StatusCodes.OK, HttpEntity(ContentTypes.`application/json`, results.toJson.toString()))
+  val json = JsObject("results" -> results.toJson, "count" -> JsNumber(results.size))
+  def marshal() = HttpResponse(StatusCodes.OK, HttpEntity(ContentTypes.`application/json`, json.toString()))
 }
 case class DocumentInfo(doc: Document) extends APIResponseSuccess {
   def marshal() = HttpResponse(StatusCodes.OK, HttpEntity(ContentTypes.`application/json`, doc.toJson.toString()))
